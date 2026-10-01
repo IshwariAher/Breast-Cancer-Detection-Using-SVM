@@ -1,0 +1,1 @@
+{"malignant": {"mean perimeter": 133.8, "mean concave points": 0.1259, "worst radius": 22.03, "worst perimeter": 146.0, "worst concave points": 0.2173}, "benign": {"mean perimeter": 65.31, "mean concave points": 0.005495, "worst radius": 11.25, "worst perimeter": 71.12, "worst concave points": 0.02381}}

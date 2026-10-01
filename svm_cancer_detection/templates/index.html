@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BreastCare AI - SVM Breast Cancer Detection</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- 1. HEADER / NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="#">
+                <i class="fa-solid fa-notes-medical me-2"></i>BreastCare AI
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#detection">Detection</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. HERO SECTION -->
+    <section id="home" class="hero-section d-flex align-items-center">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 hero-text text-center text-lg-start">
+                    <h1 class="display-4 fw-bold mb-3 text-dark">Breast Cancer Detection Using SVM</h1>
+                    <h3 class="h4 text-secondary mb-4">Machine Learning Based Breast Tumor Classification</h3>
+                    <p class="lead mb-4">An intelligent machine-learning application that uses Support Vector Machine (SVM) to classify breast tumor characteristics as benign or malignant.</p>
+                    <a href="#detection" class="btn btn-primary btn-lg rounded-pill px-4 py-2 shadow"><i class="fa-solid fa-play me-2"></i>Start Detection</a>
+                </div>
+                <div class="col-lg-6 mt-5 mt-lg-0 text-center">
+                    <div class="hero-visual ms-auto me-auto position-relative">
+                        <div class="pulse-circle"></div>
+                        <i class="fa-solid fa-microscope text-primary visual-icon shadow-lg bg-white rounded-circle p-4"></i>
+                        <div class="floating-badge badge-1 shadow-sm"><i class="fa-solid fa-check text-success me-1"></i> SVM Logic</div>
+                        <div class="floating-badge badge-2 shadow-sm"><i class="fa-solid fa-chart-line text-info me-1"></i> 94%+ Acc</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. PROJECT STATISTICS -->
+    <section class="stats-section py-5 bg-light">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card p-4 rounded-4 shadow-sm bg-white h-100">
+                        <i class="fa-solid fa-brain fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Algorithm</h5>
+                        <p class="text-muted mb-0">Support Vector Machine</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card p-4 rounded-4 shadow-sm bg-white h-100">
+                        <i class="fa-solid fa-database fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Dataset</h5>
+                        <p class="text-muted mb-0">Wisconsin Diagnostic</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card p-4 rounded-4 shadow-sm bg-white h-100">
+                        <i class="fa-solid fa-list-ol fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Features</h5>
+                        <p class="text-muted mb-0">5 Selected Features</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="stat-card p-4 rounded-4 shadow-sm bg-white h-100">
+                        <i class="fa-solid fa-stethoscope fa-2x text-primary mb-3"></i>
+                        <h5 class="fw-bold">Classification</h5>
+                        <p class="text-muted mb-0">Benign / Malignant</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. DETECTION SECTION -->
+    <section id="detection" class="detection-section py-5">
+        <div class="container" style="max-width: 800px;">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">Breast Tumor Detection</h2>
+                <p class="text-secondary">Enter the required tumor measurements to generate an SVM-based prediction.</p>
+            </div>
+
+            <div class="alert alert-info border-0 shadow-sm rounded-3 mb-4 d-flex align-items-center" role="alert">
+                <i class="fa-solid fa-circle-info fa-lg me-3 text-info"></i>
+                <div>
+                    This model uses exactly 5 optimally selected features from the Breast Cancer Wisconsin Diagnostic Dataset (via ANOVA F-test). 
+                </div>
+            </div>
+
+            <form id="predictionForm" class="bg-white p-4 p-md-5 rounded-4 shadow-sm border">
+                
+                <div class="d-flex justify-content-between align-items-center border-bottom pb-3 mb-4">
+                    <h4 class="text-primary m-0"><i class="fa-solid fa-chart-pie me-2"></i>Tumor Measurements</h4>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-outline-primary btn-sm dropdown-toggle shadow-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fa-solid fa-flask me-1"></i> Load Sample Data
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow">
+                            <li><button class="dropdown-item" type="button" id="loadMalignantBtn"><i class="fa-solid fa-circle text-danger me-2"></i>Sample (Malignant)</button></li>
+                            <li><button class="dropdown-item" type="button" id="loadBenignBtn"><i class="fa-solid fa-circle text-success me-2"></i>Sample (Benign)</button></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="row g-4 mb-4">
+                    {% for feature in features %}
+                    <div class="col-12">
+                        <label class="form-label text-capitalize fw-bold">{{ feature.replace('_', ' ') }}</label>
+                        <input type="number" step="any" class="form-control form-control-lg bg-light" name="{{ feature }}" placeholder="Enter numeric value..." required>
+                        <div class="form-text text-muted small">Diagnostic measurement for {{ feature.replace('_', ' ') }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- BUTTONS -->
+                <div class="d-flex flex-column flex-md-row gap-3 mt-4">
+                    <button type="submit" id="predictBtn" class="btn btn-primary btn-lg flex-grow-1 shadow">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i> Predict Result
+                    </button>
+                    <button type="button" id="clearBtn" class="btn btn-outline-secondary btn-lg shadow-sm">
+                        <i class="fa-solid fa-rotate-right me-2"></i> Clear Form
+                    </button>
+                </div>
+            </form>
+
+            <!-- RESULT CARD -->
+            <div id="resultCard" class="mt-5 text-center d-none">
+                <div class="card shadow-lg border-0 rounded-4 mx-auto overflow-hidden">
+                    <div class="card-body p-5">
+                        <h5 class="text-secondary text-uppercase fw-bold mb-3">Prediction Result</h5>
+                        
+                        <div id="loadingState" class="d-none py-3">
+                            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p class="mt-3 fw-bold text-primary">Analyzing with SVM...</p>
+                        </div>
+                        
+                        <div id="predictionResult" class="d-none">
+                            <h2 id="resultValue" class="display-4 fw-bold mb-3"></h2>
+                            <p id="resultConfidence" class="mb-4 badge rounded-pill px-3 py-2 fs-6 shadow-sm"></p>
+                            
+                            <p class="text-muted small mb-4">The result was generated by the trained Support Vector Machine classification model.</p>
+                            
+                            <div class="alert alert-warning text-start mb-0 small border-0 bg-opacity-10 bg-warning rounded-3" role="alert">
+                                <strong><i class="fa-solid fa-triangle-exclamation me-1"></i> Disclaimer:</strong> This prediction is intended for educational and demonstration purposes and should not be considered a medical diagnosis. Please consult a qualified healthcare professional.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="how-it-works" class="bg-light py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-dark">How It Works</h2>
+                <p class="text-secondary">A transparent view into the SVM classification workflow</p>
+            </div>
+            
+            <div class="row text-center g-4 position-relative z-1">
+                <div class="col-lg col-md-4 col-sm-6">
+                    <div class="step-card p-4 h-100 bg-white rounded-4 shadow-sm border-0">
+                        <div class="step-number text-primary fw-bold display-6 mb-3">01</div>
+                        <h5 class="fw-bold fs-6">User Input</h5>
+                        <p class="text-muted small">Input 5 diagnostic measurements.</p>
+                    </div>
+                </div>
+                <div class="col-lg col-md-4 col-sm-6">
+                    <div class="step-card p-4 h-100 bg-white rounded-4 shadow-sm border-0">
+                        <div class="step-number text-primary fw-bold display-6 mb-3">02</div>
+                        <h5 class="fw-bold fs-6">Feature Selection</h5>
+                        <p class="text-muted small">Uses pre-selected top ANOVA F-test features.</p>
+                    </div>
+                </div>
+                <div class="col-lg col-md-4 col-sm-6">
+                    <div class="step-card p-4 h-100 bg-white rounded-4 shadow-sm border-0">
+                        <div class="step-number text-primary fw-bold display-6 mb-3">03</div>
+                        <h5 class="fw-bold fs-6">Data Scaling</h5>
+                        <p class="text-muted small">StandardScaler normalizes the data dynamically.</p>
+                    </div>
+                </div>
+                <div class="col-lg col-md-6 col-sm-6">
+                    <div class="step-card p-4 h-100 bg-white rounded-4 shadow-sm border-0">
+                        <div class="step-number text-primary fw-bold display-6 mb-3">04</div>
+                        <h5 class="fw-bold fs-6">SVM Classification</h5>
+                        <p class="text-muted small">Model computes the optimal hyperplane.</p>
+                    </div>
+                </div>
+                <div class="col-lg col-md-6 col-sm-12">
+                    <div class="step-card p-4 h-100 bg-white rounded-4 shadow-sm border-0">
+                        <div class="step-number text-primary fw-bold display-6 mb-3">05</div>
+                        <h5 class="fw-bold fs-6">Prediction</h5>
+                        <p class="text-muted small">Outputs Benign or Malignant categorization.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT PROJECT SECTION -->
+    <section id="about" class="py-5 bg-white">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <h2 class="fw-bold text-dark mb-4">About Project</h2>
+                    <p class="lead text-secondary mb-4">
+                        This project demonstrates the application of machine learning for breast tumor classification using the Support Vector Machine algorithm and statistical feature selection.
+                    </p>
+                    
+                    <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                        <span class="badge bg-light text-dark border p-2 px-3 rounded-pill">Algorithm: Support Vector Machine (SVM)</span>
+                        <span class="badge bg-light text-dark border p-2 px-3 rounded-pill">Dataset: Breast Cancer Wisconsin Diagnostic</span>
+                        <span class="badge bg-light text-dark border p-2 px-3 rounded-pill">Input Features: 5 (SelectKBest)</span>
+                        <span class="badge bg-light text-dark border p-2 px-3 rounded-pill">Preprocessing: StandardScaler</span>
+                        <span class="badge bg-light text-dark border p-2 px-3 rounded-pill">Python & Flask</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <h5 class="fw-bold mb-1">BreastCare AI</h5>
+            <p class="text-white-50 small mb-2">Breast Cancer Detection using Support Vector Machine</p>
+            <hr class="border-secondary mx-auto" style="width: 100px;">
+            <p class="text-white-50 small mb-0">Developed as an academic machine learning project.</p>
+        </div>
+    </footer>
+
+    <!-- Pass sample data to JavaScript safely -->
+    <script id="sampleData" type="application/json">
+        {{ sample_data | tojson | safe }}
+    </script>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
